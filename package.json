@@ -1,0 +1,30 @@
+
+{
+  "name": "wildlife-explorer",
+  "version": "1.0.0",
+  "description": "Full-stack wildlife catalog and sightings tracker with authentication, favorites, and a community sightings feed.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "seed": "node src/data/runSeed.js"
+  },
+  "keywords": ["wildlife", "express", "sqlite", "fullstack"],
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

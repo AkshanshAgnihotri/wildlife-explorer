@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wildlife Explorer — a living field catalog</title>
+<meta name="description" content="Browse a catalog of wildlife, save your favorite species, and log your own sightings in the field.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <button class="brand" data-nav="home">Wildlife Explorer</button>
+    <nav class="main-nav" aria-label="Primary">
+      <button data-nav="explore">Explore</button>
+      <button data-nav="sightings">Sightings</button>
+      <button data-nav="favorites">Favorites</button>
+    </nav>
+    <div class="auth-area" id="authArea">
+      <button id="loginBtn" class="btn btn-ghost">Log in</button>
+      <button id="registerBtn" class="btn btn-primary">Sign up</button>
+      <div id="userMenu" class="user-menu hidden">
+        <span id="userGreeting" class="user-greeting"></span>
+        <button id="logoutBtn" class="btn btn-ghost">Log out</button>
+      </div>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="mainContent">
+
+  <section id="home" class="view view-active">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="hero-kicker">Field catalog &amp; sighting log</p>
+        <h1 class="hero-title">Every species has<br>a story worth logging.</h1>
+        <p class="hero-sub">Browse a living catalog of wildlife, save the species you care about, and record your own sightings from the field — all in one place.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-large" data-nav="explore">Explore the catalog</button>
+          <button class="btn btn-outline btn-large" data-nav="sightings">Log a sighting</button>
+        </div>
+      </div>
+      <aside class="ledger" aria-label="Catalog statistics">
+        <div class="ledger-row">
+          <span class="ledger-label">Species catalogued</span>
+          <span class="ledger-value" id="statAnimals">—</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label">Currently at risk</span>
+          <span class="ledger-value" id="statAtRisk">—</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label">Sightings logged</span>
+          <span class="ledger-value" id="statSightings">—</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label">Explorers joined</span>
+          <span class="ledger-value" id="statExplorers">—</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="explore" class="view">
+    <div class="view-header">
+      <h2>Explore the catalog</h2>
+      <p>Search and filter species by category, habitat, and conservation status.</p>
+    </div>
+    <div class="explore-layout">
+      <aside class="filters">
+        <label class="field">
+          <span>Search</span>
+          <input type="search" id="searchInput" placeholder="Lion, savanna, endangered…">
+        </label>
+        <label class="field">
+          <span>Category</span>
+          <select id="categoryFilter"><option value="">All categories</option></select>
+        </label>
+        <label class="field">
+          <span>Habitat</span>
+          <select id="habitatFilter"><option value="">All habitats</option></select>
+        </label>
+        <label class="field">
+          <span>Conservation status</span>
+          <select id="statusFilter"><option value="">All statuses</option></select>
+        </label>
+        <button id="clearFilters" class="btn btn-ghost btn-small">Clear filters</button>
+      </aside>
+      <div class="results">
+        <p class="results-count" id="resultsCount" aria-live="polite"></p>
+        <div class="animal-grid" id="animalGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sightings" class="view">
+    <div class="view-header">
+      <h2>Community sightings</h2>
+      <p>A field log of wildlife spotted by explorers like you.</p>
+    </div>
+    <div class="sightings-layout">
+      <form id="sightingForm" class="sighting-form">
+        <h3>Log a sighting</h3>
+        <p id="sightingAuthNotice" class="auth-notice hidden">
+          <button type="button" class="link-btn" id="sightingLoginLink">Log in</button> to record a sighting.
+        </p>
+        <fieldset id="sightingFields">
+          <label class="field">
+            <span>Species</span>
+            <select id="sightingAnimal" required></select>
+          </label>
+          <label class="field">
+            <span>Location</span>
+            <input type="text" id="sightingLocation" placeholder="e.g. Kruger National Park" required maxlength="150">
+          </label>
+          <label class="field">
+            <span>Date seen</span>
+            <input type="date" id="sightingDate" required>
+          </label>
+          <label class="field">
+            <span>Notes <em class="optional">optional</em></span>
+            <textarea id="sightingNotes" rows="3" maxlength="500" placeholder="What was it doing?"></textarea>
+          </label>
+          <p class="form-error" id="sightingError"></p>
+          <button type="submit" class="btn btn-primary">Log sighting</button>
+        </fieldset>
+      </form>
+      <div class="feed-wrap">
+        <div class="feed" id="sightingFeed" aria-live="polite"></div>
+        <button id="loadMoreSightings" class="btn btn-outline hidden">Load more</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="favorites" class="view">
+    <div class="view-header">
+      <h2>Your favorites</h2>
+      <p>Species you've saved to revisit later.</p>
+    </div>
+    <div id="favoritesAuthNotice" class="auth-notice hidden">
+      <button type="button" class="link-btn" id="favoritesLoginLink">Log in</button> to see and save your favorites.
+    </div>
+    <div class="animal-grid" id="favoritesGrid"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Wildlife Explorer — a full-stack demo project built with Node, Express &amp; SQLite. Conservation data is illustrative.</p>
+</footer>
+
+<div id="animalModal" class="modal-overlay hidden">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="animalModalName">
+    <button class="modal-close" id="closeAnimalModal" aria-label="Close">×</button>
+    <div id="animalModalBody"></div>
+  </div>
+</div>
+
+<div id="authModal" class="modal-overlay hidden">
+  <div class="modal modal-narrow" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <button class="modal-close" id="closeAuthModal" aria-label="Close">×</button>
+    <h2 id="authModalTitle" class="modal-title">Welcome back</h2>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Log in</button>
+      <button class="auth-tab" data-tab="register">Sign up</button>
+    </div>
+    <form id="loginForm" class="auth-form">
+      <label class="field"><span>Email</span><input type="email" id="loginEmail" required></label>
+      <label class="field"><span>Password</span><input type="password" id="loginPassword" required></label>
+      <p class="form-error" id="loginError"></p>
+      <button type="submit" class="btn btn-primary btn-full">Log in</button>
+    </form>
+    <form id="registerForm" class="auth-form hidden">
+      <label class="field"><span>Username</span><input type="text" id="registerUsername" required minlength="3" maxlength="30"></label>
+      <label class="field"><span>Email</span><input type="email" id="registerEmail" required></label>
+      <label class="field"><span>Password</span><input type="password" id="registerPassword" required minlength="8"></label>
+      <p class="form-error" id="registerError"></p>
+      <button type="submit" class="btn btn-primary btn-full">Create account</button>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
